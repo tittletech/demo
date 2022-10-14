@@ -1,0 +1,27 @@
+attach_workspace_at: &attach_workspace_at
+  attach_workspace:
+    at: .
+
+version: 2.1
+jobs:
+  some-custom-command:
+    <<: *pipeline_with_thor
+    steps:
+      - setup_remote_docker
+      - checkout
+      - <<: *attach_workspace_at
+      - mystep:
+          name: Send to << pipeline.parameters.destination >>
+          command: |
+            echo "I did something"
+  remotely-triggered:
+    when:
+      and:
+        - equal: [ 'arbitrary_value', << pipeline.parameters.workflow_name >> ]
+    jobs:
+      - jira-release
+      - some-custom-command:
+          context: special-context
+      - publish-release-notes:
+          requires:
+            - some-custom-command
