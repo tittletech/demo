@@ -6,8 +6,10 @@ attach_workspace_at: &attach_workspace_at
 parameters:
   destination:
     type: string
+    default: none
   workflow_name:
     type: string
+    default: none
 
 version: 2.1
 jobs:
