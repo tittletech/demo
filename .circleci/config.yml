@@ -20,7 +20,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - <<: *attach_workspace_at
-      - mystep:
+      - run:
           name: Send to << pipeline.parameters.destination >>
           command: |
             echo "I did something"
