@@ -31,7 +31,7 @@ workflows:
   remotely-triggered:
     when:
       and:
-        - equal: [ 'arbitrary_value', << pipeline.parameters.workflow_name >> ]
+        - equal: [ << pipeline.parameters.workflow_name >>, 'remotely-triggered' ]
     jobs:
       - some-custom-command:
           context: special-context
