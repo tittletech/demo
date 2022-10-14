@@ -5,6 +5,8 @@ attach_workspace_at: &attach_workspace_at
 version: 2.1
 jobs:
   some-custom-command:
+    docker:
+      - image: bash:latest
     steps:
       - setup_remote_docker
       - checkout
@@ -22,9 +24,5 @@ workflows:
       and:
         - equal: [ 'arbitrary_value', << pipeline.parameters.workflow_name >> ]
     jobs:
-      - jira-release
       - some-custom-command:
           context: special-context
-      - publish-release-notes:
-          requires:
-            - some-custom-command
