@@ -14,6 +14,10 @@ jobs:
           name: Send to << pipeline.parameters.destination >>
           command: |
             echo "I did something"
+
+workflows:
+  version: 2
+
   remotely-triggered:
     when:
       and:
