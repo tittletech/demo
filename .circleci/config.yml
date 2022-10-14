@@ -2,6 +2,13 @@ attach_workspace_at: &attach_workspace_at
   attach_workspace:
     at: .
 
+
+parameters:
+  destination:
+    type: string
+  workflow_name:
+    type: string
+
 version: 2.1
 jobs:
   some-custom-command:
