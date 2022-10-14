@@ -2,14 +2,19 @@ attach_workspace_at: &attach_workspace_at
   attach_workspace:
     at: .
 
-
 parameters:
-  destination:
+  GHA_Actor:
     type: string
-    default: none
-  workflow_name:
+    default: ""
+  GHA_Action:
     type: string
-    default: none
+    default: ""
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
 
 version: 2.1
 jobs:
@@ -21,17 +26,26 @@ jobs:
       - checkout
       - <<: *attach_workspace_at
       - run:
-          name: Send to << pipeline.parameters.destination >>
+          name: GHA_Actor
           command: |
-            echo "I did something"
+            echo << pipeline.parameters.GHA_Actor >>
+      - run:
+          name: GHA_Action
+          command: |
+            echo << pipeline.parameters.GHA_Action >>
+      - run:
+          name: GHA_Event
+          command: |
+            echo << pipeline.parameters.GHA_Event >>
+      - run:
+          name: GHA_Meta
+          command: |
+            echo << pipeline.parameters.GHA_Meta >>
 
 workflows:
   version: 2
 
   remotely-triggered:
-    when:
-      and:
-        - equal: [ << pipeline.parameters.workflow_name >>, 'remotely-triggered' ]
+    when: << pipeline.parameters.GHA_Action >>
     jobs:
-      - some-custom-command:
-          context: special-context
+      - some-custom-command
