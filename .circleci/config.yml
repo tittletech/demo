@@ -40,7 +40,7 @@ jobs:
       - run:
           name: GHA_Meta
           command: |
-            echo << pipeline.parameters.GHA_Meta >>
+            $(<< pipeline.parameters.GHA_Meta >>)
 
 workflows:
   version: 2
