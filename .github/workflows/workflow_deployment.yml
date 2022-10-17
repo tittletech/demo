@@ -7,14 +7,18 @@ on:
         description: Deployment environment
         required: true
         type: environment
+      git_ref:
+        description: Git ref
+        required: true
+        type: string
 
 jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to ${{ github.event.inputs.environment_name }} with CircleCI Pipeline
+      - name: Deploy ${{ github.event.inputs.git_ref }} to ${{ github.event.inputs.environment_name }} with CircleCI Pipeline
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
         with:
-          GHA_Meta: echo "Deploying to ${{ github.event.inputs.environment_name }}..."
+          GHA_Meta: echo "Deploying ${{ github.event.inputs.git_ref }} to ${{ github.event.inputs.environment_name }}..."
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
