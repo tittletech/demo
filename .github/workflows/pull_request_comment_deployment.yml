@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: get pull request ref
         id: get_pull_request_ref
-        uses: octokit/request-action@v2
+        uses: octokit/request-action@v2.x
         with:
           route: GET /repos/:repository/pulls/:issue_id
           repository: ${{ github.repository }}
