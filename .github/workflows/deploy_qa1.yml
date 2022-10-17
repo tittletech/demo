@@ -8,11 +8,11 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    environment: production
+    environment: qa1
     steps:
-      - name: Deploy with CircleCI Pipeline
+      - name: Deploy to QA1 with CircleCI Pipeline
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
         with:
-          GHA_Meta: echo "I AM TOAST!"
+          GHA_Meta: echo "Deploying to QA1..."
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
