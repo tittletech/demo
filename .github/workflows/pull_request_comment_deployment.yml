@@ -1,0 +1,39 @@
+name: Pull Request Comment Deployment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get pull request ref
+        id: get_pull_request_ref
+        uses: octokit/request-action@v2
+        with:
+          route: GET /repos/:repository/pulls/:issue_id
+          repository: ${{ github.repository }}
+          issue_id: ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ github.event.comment.body }} with CircleCI Pipeline
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        with:
+          GHA_Meta: echo "Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ github.event.comment.body }}..."
+        env:
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+
+      # - name: create deployment
+      #   id: create_deployment
+      #   uses: octokit/request-action@v2
+      #   with:
+      #     route: POST /repos/:repository/deployments
+      #     repository: ${{ github.repository }}
+      #     ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
+      #     environment: ${{ github.event.comment.body }}
+      #     auto_merge: false
+      #   env:
+      #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
