@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - environment/qa2
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: qa2
+    steps:
+      - name: Deploy to QA2 with CircleCI Pipeline
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        with:
+          GHA_Meta: echo "Deploying to QA2..."
+        env:
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
