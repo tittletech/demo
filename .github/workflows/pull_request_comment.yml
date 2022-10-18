@@ -5,14 +5,13 @@ on:
     types: [created]
 
 jobs:
-  deployment:
+  cciParams:
     runs-on: ubuntu-latest
     steps:
       - uses: jungwinter/split@v2
         id: split
         with:
           msg: ${{ github.event.comment.body }}
-
       - name: get pull request ref
         id: get_pull_request_ref
         uses: octokit/request-action@v2.x
@@ -22,25 +21,40 @@ jobs:
           issue_id: ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    outputs:
+      git_ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
+      environment_name: ${{ steps.split.outputs._1 }}
 
-      - name: Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ steps.split.outputs._1 }} with CircleCI Pipeline
-        if: steps.split.outputs._0 == '/deploy'
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
-        with:
-          GHA_Meta: echo "Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ steps.split.outputs._1 }}..."
-        env:
-          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+  runDeploymentWorkflow:
+    uses: tittletech/demo/.github/workflows/workflow_deployment.yml@main
+    needs: cciParams
+    with:
+      environment_name: ${{ needs.cciParams.outputs.environment_name }}
+      git_ref: ${{ needs.cciParams.outputs.git_ref }}
 
-      - name: create deployment
-        if: steps.split.outputs._0 == '/deploy'
-        id: create_deployment
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /repos/:repository/deployments
-          repository: ${{ github.repository }}
-          ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
-          environment: ${{ steps.split.outputs._1 }}
-          auto_merge: false
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+
+
+      # - name: Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ steps.split.outputs._1 }} with CircleCI Pipeline
+      #   if: steps.split.outputs._0 == '/deploy'
+      #   uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+      #   with:
+      #     GHA_Meta: echo "Deploying ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }} to ${{ steps.split.outputs._1 }}..."
+      #   env:
+      #     CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+      #   outputs:
+
+
+      # - name: create deployment
+      #   if: steps.split.outputs._0 == '/deploy'
+      #   id: create_deployment
+      #   uses: octokit/request-action@v2.x
+      #   with:
+      #     route: POST /repos/:repository/deployments
+      #     repository: ${{ github.repository }}
+      #     ref: ${{ fromJson(steps.get_pull_request_ref.outputs.data).head.ref }}
+      #     environment: ${{ steps.split.outputs._1 }}
+      #     auto_merge: false
+      #   env:
+      #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
