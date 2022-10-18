@@ -1,0 +1,20 @@
+name: Workflow Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: Deployment environment
+        required: true
+        type: environment
+      git_ref:
+        description: Git ref
+        required: true
+        type: string
+
+jobs:
+  runDeploymentWorkflow:
+    uses: tittletech/demo/.github/workflows/workflow_deployment.yml@main
+    with:
+      environment_name: ${{ github.event.inputs.environment_name }}
+      git_ref: ${{ github.event.inputs.git_ref }}
