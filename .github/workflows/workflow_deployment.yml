@@ -11,6 +11,9 @@ on:
         description: Git ref
         required: true
         type: string
+    secrets:
+      auth_token:
+        required: true
 
 jobs:
   deployment:
@@ -21,4 +24,4 @@ jobs:
         with:
           GHA_Meta: echo "Deploying ${{ inputs.git_ref }} to ${{ inputs.environment_name }}..."
         env:
-          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+          CCI_TOKEN: ${{ inputs.auth_token }}

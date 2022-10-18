@@ -31,6 +31,8 @@ jobs:
     with:
       environment_name: ${{ needs.cciParams.outputs.environment_name }}
       git_ref: ${{ needs.cciParams.outputs.git_ref }}
+    secrets:
+      auth_token: ${{ secrets.CCI_TOKEN }}
 
 
 
