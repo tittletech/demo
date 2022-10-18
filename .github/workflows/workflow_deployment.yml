@@ -16,9 +16,9 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy ${{ github.event.inputs.git_ref }} to ${{ github.event.inputs.environment_name }} with CircleCI Pipeline
+      - name: Deploy ${{ inputs.git_ref }} to ${{ inputs.environment_name }} with CircleCI Pipeline
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
         with:
-          GHA_Meta: echo "Deploying ${{ github.event.inputs.git_ref }} to ${{ github.event.inputs.environment_name }}..."
+          GHA_Meta: echo "Deploying ${{ inputs.git_ref }} to ${{ inputs.environment_name }}..."
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
