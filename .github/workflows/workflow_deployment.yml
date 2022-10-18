@@ -6,7 +6,7 @@ on:
       environment_name:
         description: Deployment environment
         required: true
-        type: environment
+        type: string
       git_ref:
         description: Git ref
         required: true
