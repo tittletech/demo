@@ -24,4 +24,4 @@ jobs:
         with:
           GHA_Meta: echo "Deploying ${{ inputs.git_ref }} to ${{ inputs.environment_name }}..."
         env:
-          CCI_TOKEN: ${{ inputs.auth_token }}
+          CCI_TOKEN: ${{ secrets.auth_token }}
