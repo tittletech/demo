@@ -18,3 +18,5 @@ jobs:
     with:
       environment_name: ${{ github.event.inputs.environment_name }}
       git_ref: ${{ github.event.inputs.git_ref }}
+    secrets:
+      auth_token: ${{ secrets.CCI_TOKEN }}
